@@ -168,7 +168,7 @@ const profile = () => {
                     />
                   </span>
                   <input
-                    className="bg-blue-500 w-96 md:w-32 px-4 py-2 rounded-md border-2 border-green-800 shadow-md cursor-pointer text-white"
+                    className="bg-blue-500 w-32 md:w-96 px-4 py-2 rounded-md border-2 border-green-800 shadow-md cursor-pointer text-white"
                     type="submit"
                     value="Save profile"
                   />
@@ -251,7 +251,7 @@ const profile = () => {
                     />
                   </span>
                   <input
-                    className="bg-blue-500 w-96 md:w-32 px-4 py-2 rounded-md border-2 border-green-800 shadow-md cursor-pointer mb-10 text-white"
+                    className="bg-blue-500 w-32 md:w-96 px-4 py-2 rounded-md border-2 border-green-800 shadow-md cursor-pointer mb-10 text-white"
                     type="submit"
                     value="Save socials"
                   />

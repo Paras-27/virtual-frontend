@@ -65,6 +65,10 @@ img {
   ); /* sky blue to white gradient */
 }
 
+.navline {
+  border-bottom: 1px solid black;
+}
+
 .login-with-google-btn {
   display: flex;
   justify-content: center;
@@ -251,6 +255,6 @@ img {
     background-color: rgb(236, 94, 94);
   }
   .Links-container-bottom {
-    width: 73%;
+    width: 86%;
   }
 }

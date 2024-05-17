@@ -80,7 +80,7 @@ const Editlinks = () => {
               <form onSubmit={saveLinks}>
                 {links.map((link, index) => (
                   <div
-                    className="flex flex-col md:flex-row justify-evenly pl-16 my-2 md:pl-0"
+                    className="flex flex-col md:flex-row justify-evenly pl-8 my-2 md:pl-0"
                     key={index}
                   >
                     <label>

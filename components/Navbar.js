@@ -54,7 +54,7 @@ const NavBar = () => {
               className="h-8 mr-3 rounded-3xl"
               alt="Company Logo"
             />
-            <span className="self-center text-xl font-semibold whitespace-nowrap">
+            <span className="self-center text-l font-semibold whitespace-nowrap">
               Tree and Human Knot
             </span>
           </Link>
@@ -88,24 +88,24 @@ const NavBar = () => {
             id="navbar-default"
           >
             <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0">
-              {user ? (
+              {user && userData ? (
                 <li className="flex flex-col md:flex-row">
                   <Link
                     href="/"
-                    className="block py-2 pl-3 pr-4 mr-2"
+                    className="navline block py-2 pl-3 pr-4 mr-2"
                     aria-current="page"
                   >
                     Home
                   </Link>
                   <Link
                     href={`${process.env.NEXT_PUBLIC_FRONT_URL}${userData.handle}`}
-                    className="block py-2 pl-3 pr-3  text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent"
+                    className="navline block py-2 pl-3 pr-3  text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent"
                   >
                     Appearance
                   </Link>
                   <Link
                     href="/profile"
-                    className="py-2 pl-2 pr-4 mr-2 text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent flex items-center relative bottom-1"
+                    className="navline py-2 pl-2 pr-4 mr-2 text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent flex items-center relative bottom-1"
                   >
                     <img
                       referrerpolicy="no-referrer"
@@ -116,7 +116,7 @@ const NavBar = () => {
                   </Link>
                   <p
                     onClick={handleLogout}
-                    className="block py-2 pl-3 pr-4 mr-2 text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent cursor-pointer"
+                    className="navline block py-2 pl-3 pr-4 mr-2 text-gray-900 rounded md:hover:bg-transparent md:border-0  md:dark:hover:bg-transparent cursor-pointer"
                   >
                     Logout
                   </p>
