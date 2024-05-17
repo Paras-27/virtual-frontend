@@ -1,7 +1,6 @@
 import NavBar from "@/components/Navbar";
 import React, { useEffect, useState } from "react";
 
-// import UserHeader from "../../components/UserHeader";
 import { toast } from "react-toastify";
 
 const profile = () => {
@@ -42,7 +41,6 @@ const profile = () => {
         setAvatar(data.userData.avatar);
         setHandle(data.userData.handle);
         setBio(data.userData.bio);
-        console.log(data);
         setSocial(data.userData.socials);
         // toast.success(data.message)
       })

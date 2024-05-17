@@ -4,16 +4,15 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import NavBar from "@/components/Navbar";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Apply = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginwithgoogle = (e) => {
-    e.preventDefault();
-    window.location.href = `${process.env.NEXT_PUBLIC_GOOGLE_URL}`;
-  };
   const handleLogin = (e) => {
     e.preventDefault();
     // backend here
@@ -42,6 +41,39 @@ const Apply = () => {
         console.log(err);
       });
   };
+
+  const handleGoogleLogin = (credentialResponse) => {
+    const details = jwtDecode(credentialResponse.credential);
+    const email = details.email;
+    const password = details.sub;
+    console.log("details", details);
+    // backend here
+    fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API}/login`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          toast("You are Logged in");
+          localStorage.setItem("LinkTreeToken", data.token);
+          router.push("/");
+        }
+        if (data.status === "not found") {
+          toast.error("User not found");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (localStorage.getItem("LinkTreeToken")) {
       router.push("/");
@@ -50,7 +82,6 @@ const Apply = () => {
   return (
     <>
       <NavBar />
-
       <section
         className={
           styles.background +
@@ -91,12 +122,19 @@ const Apply = () => {
                 type="submit"
                 value="Login"
               />
-              <button
-                className="login-with-google-btn"
-                onClick={loginwithgoogle}
-              >
-                Sign In With Google
-              </button>
+              <div className="login-with-google-btn">
+                <GoogleOAuthProvider
+                  clientId={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
+                >
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    theme="filled_blue"
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </GoogleOAuthProvider>
+              </div>
             </form>
           </div>
           <h4 className="text-center text-white pt-3">

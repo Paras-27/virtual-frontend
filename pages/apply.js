@@ -4,17 +4,22 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import NavBar from "@/components/Navbar";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Apply = () => {
   const router = useRouter();
   const [handle, setHandle] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const image = "https://cdn-icons-png.flaticon.com/512/4140/4140048.png";
 
   const handleRegister = (e) => {
     e.preventDefault();
     // backend part
+    const name = "";
+    const avatar = image;
     fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API}/register`, {
       method: "POST",
       headers: {
@@ -24,19 +29,19 @@ const Apply = () => {
         handle,
         email,
         password,
+        name,
+        avatar,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.status === "success") {
           toast("You are registered successfully");
           localStorage.setItem("LinkTreeToken", data.token);
-          setSubmitted(true);
-          router.push("/login");
+          router.push("/");
         } else if (
           data.status === "error" &&
-          data.message === "Try different email or username"
+          data.message === "Try different email or handle"
         ) {
           toast.error(data.message);
         }
@@ -46,9 +51,48 @@ const Apply = () => {
       });
   };
 
-  const loginWithGoogle = (e) => {
-    e.preventDefault();
-    window.location.href = `${process.env.NEXT_PUBLIC_GOOGLE_URL}`;
+  const handleGoogleLogin = (credentialResponse) => {
+    const details = jwtDecode(credentialResponse.credential);
+    const email = details.email;
+    const password = details.sub;
+    const name = details.name;
+    const handle = generateUniqueHandleName(name);
+    const avatar = details.picture ? details.picture : image;
+    fetch(`${process.env.NEXT_PUBLIC_REACT_APP_API}/register`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        handle,
+        email,
+        password,
+        name,
+        avatar,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          toast("You are registered successfully");
+          localStorage.setItem("LinkTreeToken", data.token);
+          router.push("/");
+        } else if (
+          data.status === "error" &&
+          data.message === "Try different email or handle"
+        ) {
+          toast.error(data.message);
+        }
+      })
+      .catch((err) => {
+        toast.error("Try a different username");
+      });
+  };
+
+  const generateUniqueHandleName = (displayName) => {
+    const cleanName = displayName.replace(/\W+/g, "");
+    const timestamp = String(new Date().getTime()).slice(-5);
+    return `${cleanName}_${timestamp}`;
   };
 
   useEffect(() => {
@@ -62,12 +106,13 @@ const Apply = () => {
       <NavBar />
       <section
         className={
-          styles.background + " min-h-screen flex justify-center apply"
+          styles.background +
+          " min-h-screen flex items-center justify-center apply"
         }
       >
-        <div className="main mt-20 apply-form">
-          <div className="content bg-white border-2 px-4 py-4 rounded-2xl shadow-lg">
-            <h1 className="text-xl font-bold text-center">
+        <div className="main apply-form">
+          <div className="content bg-white border-2 px-4 py-8 rounded-2xl shadow-lg">
+            <h1 className="text-2xl font-bold text-center">
               Create Your Personal Virtual Id
             </h1>
 
@@ -107,12 +152,19 @@ const Apply = () => {
                 type="submit"
                 value="Apply"
               />
-              <button
-                className="login-with-google-btn"
-                onClick={loginWithGoogle}
-              >
-                Sign up with Google
-              </button>
+              <div className="login-with-google-btn">
+                <GoogleOAuthProvider
+                  clientId={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
+                >
+                  <GoogleLogin
+                    onSuccess={handleGoogleLogin}
+                    theme="filled_blue"
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </GoogleOAuthProvider>
+              </div>
             </form>
           </div>
           <h4 className="text-center text-white pt-3">
