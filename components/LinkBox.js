@@ -1,9 +1,6 @@
-import React, { use, useEffect } from "react";
+import React from "react";
 
 const LinkBox = ({ lbTitle, lbNumber, lbSvg, lbTheme }) => {
-  useEffect(() => {
-    console.log({ lbTitle, lbNumber, lbSvg, lbTheme });
-  }, []);
   return (
     <div className="flex items-center p-6 md:p-8 bg-white shadow border rounded-lg">
       <div
