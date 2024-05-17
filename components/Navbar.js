@@ -33,7 +33,7 @@ const NavBar = () => {
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("data");
-    if (!userData.avatar) {
+    if (!userData || !userData.avatar) {
       const localUserData = JSON.parse(storedUserData);
       setUserData(localUserData);
       // Now you can use the userData object

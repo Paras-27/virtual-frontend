@@ -15,6 +15,10 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("LinkTreeToken");
+        if (!token) {
+          router.push("/login");
+        }
+        console.log(token);
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_REACT_APP_API}/dashboard`,
           {
